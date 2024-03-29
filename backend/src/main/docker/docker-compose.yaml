@@ -6,6 +6,8 @@ services:
     image: 'kartaca:latest'
     build:
       context: .
+    ports:
+      - '8080:8080'
     depends_on:
       - db
     environment:
@@ -13,10 +15,14 @@ services:
       - SPRING_DATASOURCE_USERNAME=compose-postgres
       - SPRING_DATASOURCE_PASSWORD=compose-postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - POSTRESQL_HOST=db
 
   db:
     image: 'postgres:latest'
+    ports:
+      - '5432:5432'
     environment:
+      - POSTGRES_DB=compose-postgres
       - POSTGRES_USER=compose-postgres
       - POSTGRES_PASSWORD=compose-postgres
     volumes:
