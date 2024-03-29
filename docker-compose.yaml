@@ -28,5 +28,12 @@ services:
     volumes:
       - dbdata:/var/lib/postgresql/data
 
+  frontend:
+    image: 'earthquake-frontend:latest'
+    build:
+      context: frontend/
+    ports:
+      - '5173:80'
+
 volumes:
   dbdata:
