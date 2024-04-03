@@ -5,12 +5,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import org.hibernate.annotations.CreationTimestamp;
+import java.time.LocalDateTime;
 
 @Entity
 public class Earthquake {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
+    @CreationTimestamp
+    private LocalDateTime createdAt;
     private double lat;
     private double lon;
     private double magnitude;
@@ -25,6 +28,7 @@ public class Earthquake {
     public double getMagnitude() {
         return magnitude;
     }
+    public LocalDateTime getCreatedAt() { return createdAt; }
     public void setLat(double lat) {
         this.lat = lat;
     }
