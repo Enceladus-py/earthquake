@@ -9,6 +9,7 @@ export interface MarkerData {
     lng: number;
   };
   magnitude: number;
+  id: number;
 }
 
 const center = { lat: 38.9637, lng: 35.2433 }

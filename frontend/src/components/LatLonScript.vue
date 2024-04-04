@@ -34,7 +34,7 @@ const handleContButtonClick = () => {
 }
 
 const addMarker = (data : MarkerObjData) => {
-  axios.post('http://localhost:8080/earthquakes', data)
+  axios.post('http://localhost:8080/earthquakes/add', data)
       .then(response => {
         console.log(response.data);
         markers?.value.push({
@@ -43,7 +43,9 @@ const addMarker = (data : MarkerObjData) => {
             lng: response.data.lon
           },
           magnitude: response.data.magnitude,
+          id: response.data.id,
         })
+        count.value += 1
       })
       .catch(error => {
         console.error(error)
@@ -53,13 +55,26 @@ const addMarker = (data : MarkerObjData) => {
 const random = (min: number, max: number) => Math.floor(Math.random() * (max - min)) + min
 
 const sendMessage = () => {
-  count.value += 1
   addMarker({
     lat: random(0, 42),
     lon: random(0, 45),
     magnitude: random(0, 10),
   })
 }
+
+const deleteMarkers = () => {
+  axios.get('http://localhost:8080/earthquakes/deleted')
+      .then(response => {
+        if(markers && markers.value){
+          markers.value = markers.value.filter(x => !response.data.includes(x.id))
+          count.value = markers.value.length
+        }
+      })
+      .catch(error => {
+        console.error(error)
+      })
+}
+setInterval(deleteMarkers, 3600000)
 
 const handleButtonClick = () => {
   console.log(latitude.value, longitude.value, magnitude.value)

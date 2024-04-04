@@ -28,7 +28,12 @@ public class Earthquake {
     public double getMagnitude() {
         return magnitude;
     }
-    public LocalDateTime getCreatedAt() { return createdAt; }
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+    public Long getId() {
+        return id;
+    }
     public void setLat(double lat) {
         this.lat = lat;
     }
