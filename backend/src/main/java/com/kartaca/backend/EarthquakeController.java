@@ -12,23 +12,19 @@ import java.util.List;
 public class EarthquakeController {
 
     @Autowired
-    private EarthquakeRepository earthquakeRepository;
-
-    @Autowired
     private ScheduledTask scheduledTask;
 
     @Autowired
-    private KafkaProducer kafkaProducer;
+    private EarthquakeProducer eqProducer;
 
     private static final double THRESHOLD = 7.0;
 
     @PostMapping("/add")
-    public ResponseEntity<Earthquake> createEarthquake(@RequestBody Earthquake eq) {
+    public ResponseEntity<String> createEarthquake(@RequestBody Earthquake eq) {
         if (eq.getMagnitude() >= THRESHOLD) {
-            kafkaProducer.sendMessage(eq);
+            eqProducer.sendMessage(eq);
         }
-        Earthquake savedEq = earthquakeRepository.save(eq);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedEq);
+        return ResponseEntity.ok("ok");
     }
 
     @GetMapping("/deleted")
