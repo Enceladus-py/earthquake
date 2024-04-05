@@ -17,8 +17,16 @@ public class EarthquakeController {
     @Autowired
     private ScheduledTask scheduledTask;
 
+    @Autowired
+    private KafkaProducer kafkaProducer;
+
+    private static final double THRESHOLD = 7.0;
+
     @PostMapping("/add")
     public ResponseEntity<Earthquake> createEarthquake(@RequestBody Earthquake eq) {
+        if (eq.getMagnitude() >= THRESHOLD) {
+            kafkaProducer.sendMessage(eq);
+        }
         Earthquake savedEq = earthquakeRepository.save(eq);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedEq);
     }

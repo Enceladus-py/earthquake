@@ -18,14 +18,15 @@ public class BackendApplication {
 
 	@Bean
 	public NewTopic topic() {
-		return TopicBuilder.name("topic1")
+		return TopicBuilder.name("random-eq-topic")
 				.partitions(10)
 				.replicas(1)
 				.build();
 	}
 
-	@KafkaListener(id = "myId", topics = "topic1")
+	@KafkaListener(id = "myId", topics = "random-eq-topic")
 	public void listen(String in) {
+		// TODO implement eq grouping logic with distance < 50km
 		System.out.println(in);
 	}
 
