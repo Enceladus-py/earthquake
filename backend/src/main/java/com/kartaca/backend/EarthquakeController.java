@@ -17,14 +17,10 @@ public class EarthquakeController {
     @Autowired
     private EarthquakeProducer eqProducer;
 
-    private static final double THRESHOLD = 7.0;
-
     @PostMapping("/add")
     public ResponseEntity<String> createEarthquake(@RequestBody Earthquake eq) {
-        if (eq.getMagnitude() >= THRESHOLD) {
-            eqProducer.sendMessage(eq);
-        }
-        return ResponseEntity.ok("ok");
+        eqProducer.sendMessage(eq);
+        return ResponseEntity.ok("eq sent");
     }
 
     @GetMapping("/deleted")
