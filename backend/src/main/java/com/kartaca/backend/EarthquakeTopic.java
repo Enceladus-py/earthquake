@@ -12,7 +12,7 @@ public class EarthquakeTopic {
     @Bean
     public NewTopic randomEarthquakeTopic() {
         return TopicBuilder.name(TOPIC)
-                .partitions(10)
+                .partitions(1)
                 .replicas(1)
                 .build();
     }

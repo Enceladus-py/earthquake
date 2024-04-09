@@ -20,6 +20,7 @@ provide('markers', markers)
 </script>
 
 <template>
+  <h3>Earthquake App</h3>
   <GoogleMap
       api-key="AIzaSyAi3Vw0HIEUoFiphC9jLjm757NpgL946tA"
       style="width: 100%; height: 500px"

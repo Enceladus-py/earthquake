@@ -20,7 +20,8 @@ public class EarthquakeController {
     @PostMapping("/add")
     public ResponseEntity<String> createEarthquake(@RequestBody Earthquake eq) {
         eqProducer.sendMessage(eq);
-        return ResponseEntity.ok("eq sent");
+        String message = "lat: " + eq.getLat() + " lon: " + eq.getLon() + " mag: " + eq.getMagnitude();
+        return ResponseEntity.ok("eq sent with params:" + message);
     }
 
     @GetMapping("/deleted")

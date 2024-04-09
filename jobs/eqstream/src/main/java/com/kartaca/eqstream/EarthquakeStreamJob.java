@@ -37,7 +37,7 @@ public class EarthquakeStreamJob {
         DataStream<Earthquake> eqClustered = env
                 .fromSource(source, WatermarkStrategy
                         .<Earthquake>forBoundedOutOfOrderness(Duration.ofSeconds(20))
-                        .withIdleness(Duration.ofMinutes(1)), "Kafka Source")
+                        .withIdleness(Duration.ofSeconds(30)), "Kafka Source")
                 .filter(eq -> eq.getMagnitude() >= 7.0)
                 .windowAll(TumblingEventTimeWindows.of(Duration.ofSeconds(5)))
                 .process(new ClusterEarthquakes())

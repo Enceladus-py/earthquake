@@ -37,15 +37,6 @@ const addMarker = (data : MarkerObjData) => {
   axios.post('http://localhost:8080/earthquakes/add', data)
       .then(response => {
         console.log(response.data);
-        markers?.value.push({
-          position: {
-            lat: response.data.lat,
-            lng: response.data.lon
-          },
-          magnitude: response.data.magnitude,
-          id: response.data.id,
-        })
-        count.value += 1
       })
       .catch(error => {
         console.error(error)
@@ -75,6 +66,23 @@ const deleteMarkers = () => {
       })
 }
 setInterval(deleteMarkers, 3600000)
+
+const socket = new WebSocket("ws://localhost:8080/eq-created");
+
+// Listen for messages
+socket.addEventListener("message", (event) => {
+  console.log("Message from server ", event.data);
+  const eq = JSON.parse(event.data)
+  markers?.value.push({
+    position: {
+      lat: eq.lat,
+      lng: eq.lon
+    },
+    magnitude: eq.magnitude,
+    id: eq.id,
+  })
+  count.value += 1
+})
 
 const handleButtonClick = () => {
   console.log(latitude.value, longitude.value, magnitude.value)
