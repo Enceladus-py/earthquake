@@ -20,6 +20,12 @@ public class EarthquakeController {
     @Autowired
     private EarthquakeRepository eqRepo;
 
+    @GetMapping("/list")
+    public ResponseEntity<List<Earthquake>> getAllEarthquakes() {
+        List<Earthquake> earthquakes = eqRepo.findAll();
+        return ResponseEntity.ok(earthquakes);
+    }
+
     @PostMapping("/add")
     public ResponseEntity<String> addEarthquake(@RequestBody Earthquake eq) {
         eqProducer.sendMessage(eq);

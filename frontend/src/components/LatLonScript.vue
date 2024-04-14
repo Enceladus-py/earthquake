@@ -11,7 +11,7 @@ interface MarkerObjData {
 
 let isClicked = false
 let interval = 0
-const count = ref(0)
+const count : Ref<number> | undefined = inject('count')
 const markers : Ref<MarkerData[]> | undefined = inject('markers')
 const latitude = ref(0)
 const longitude = ref(0)
@@ -58,7 +58,7 @@ const deleteMarkers = () => {
       .then(response => {
         if(markers && markers.value){
           markers.value = markers.value.filter(x => !response.data.includes(x.id))
-          count.value = markers.value.length
+          if(count) count.value = markers.value.length
         }
       })
       .catch(error => {
@@ -80,8 +80,9 @@ socket.addEventListener("message", (event) => {
     },
     magnitude: eq.magnitude,
     id: eq.id,
-  })
-  count.value += 1
+  }
+  )
+  if (count) count.value += 1
 })
 
 const handleButtonClick = () => {
@@ -101,7 +102,7 @@ const handleButtonClick = () => {
           magnitude: response.data.magnitude,
           id: response.data.id,
         })
-        count.value += 1
+        if (count) count.value += 1
       })
       .catch(error => {
         console.error(error)

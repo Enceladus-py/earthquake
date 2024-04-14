@@ -3,6 +3,7 @@ package com.kartaca.backend;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -10,6 +11,11 @@ import java.util.List;
 
 @Repository
 public interface EarthquakeRepository extends CrudRepository<Earthquake, Long> {
+
+    @Override
+    @NonNull
+    List<Earthquake> findAll();
+
     List<Earthquake> findByCreatedAtBefore(LocalDateTime threshold);
     @Query(value = "SELECT * FROM Earthquake e WHERE 2 * 6371 * ATAN2(" +
             "SQRT(SIN(RADIANS((:latitude - e.lat) / 2)) ^ 2 + " +

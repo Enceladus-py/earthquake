@@ -2,6 +2,7 @@
 import { ref, provide, type Ref } from 'vue'
 import {GoogleMap, Marker, InfoWindow} from "vue3-google-map";
 import LatLonScript from "@/components/LatLonScript.vue";
+import axios from "axios";
 
 export interface MarkerData {
   position: {
@@ -12,10 +13,32 @@ export interface MarkerData {
   id: number;
 }
 
-const center = { lat: 38.9637, lng: 35.2433 }
 const markers : Ref<MarkerData[]> | undefined  = ref([])
+const count = ref(0)
+
+axios.get('http://localhost:8080/earthquakes/list')
+    .then(response => {
+      response.data.forEach( (eq:any) => {
+        markers.value.push({
+          position: {
+            lat: eq.lat,
+            lng: eq.lon
+          },
+          magnitude: eq.magnitude,
+          id: eq.id,
+        }
+      )
+        count.value += 1
+      }
+    )})
+    .catch(error => {
+      console.error(error)
+    })
+
+const center = { lat: 38.9637, lng: 35.2433 }
 
 provide('markers', markers)
+provide('count', count)
 
 </script>
 
@@ -35,9 +58,10 @@ provide('markers', markers)
       <InfoWindow>
         <div id="content">
           <div id="siteNotice"></div>
-          <h1 id="firstHeading" class="firstHeading">Magnitude</h1>
+          <h1 id="firstHeading" class="firstHeading">Information</h1>
           <div id="bodyContent">
-            <p>{{marker.magnitude}}</p>
+            <p>Magnitude: {{marker.magnitude}}</p>
+            <p>Position: {{marker.position}}</p>
           </div>
         </div>
       </InfoWindow>
