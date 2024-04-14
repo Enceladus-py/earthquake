@@ -2,6 +2,13 @@
 
 This is the repo for the kartaca assignment. `Java Spring Boot` is used for backend, `Vue.js` is used for frontend.
 
+# Process Overview
+
+![overview](kartaca.drawio.png)
+
+For incoming data stream, a kafka topic is created in order to queue the data. A kafka sink is created in the flink job
+and then this incoming earthquake data is filtered and grouped.
+
 ## How2Run 
 
 frontend and backend are implemented as one container since it is not a big application. You can run the project simply typing:

@@ -85,12 +85,27 @@ socket.addEventListener("message", (event) => {
 })
 
 const handleButtonClick = () => {
-  console.log(latitude.value, longitude.value, magnitude.value)
-  addMarker({
+  const data = {
     lat: latitude.value,
     lon: longitude.value,
     magnitude: magnitude.value,
-  })
+  }
+  axios.post('http://localhost:8080/earthquakes/create', data)
+      .then(response => {
+        console.log(response.data);
+        markers?.value.push({
+          position: {
+            lat: response.data.lat,
+            lng: response.data.lon
+          },
+          magnitude: response.data.magnitude,
+          id: response.data.id,
+        })
+        count.value += 1
+      })
+      .catch(error => {
+        console.error(error)
+      })
 }
 
 </script>

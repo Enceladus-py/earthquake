@@ -17,11 +17,23 @@ public class EarthquakeController {
     @Autowired
     private EarthquakeProducer eqProducer;
 
+    @Autowired
+    private EarthquakeRepository eqRepo;
+
     @PostMapping("/add")
-    public ResponseEntity<String> createEarthquake(@RequestBody Earthquake eq) {
+    public ResponseEntity<String> addEarthquake(@RequestBody Earthquake eq) {
         eqProducer.sendMessage(eq);
         String message = "lat: " + eq.getLat() + " lon: " + eq.getLon() + " mag: " + eq.getMagnitude();
         return ResponseEntity.ok("eq sent with params:" + message);
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<Earthquake> createEarthquake(@RequestBody Earthquake eq) {
+        if (eq.getMagnitude() >= 7.0 && eqRepo.findEarthquakesWithin50km(eq.getLat(), eq.getLon()).isEmpty()) {
+            Earthquake savedEq = eqRepo.save(eq);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedEq);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
     @GetMapping("/deleted")
